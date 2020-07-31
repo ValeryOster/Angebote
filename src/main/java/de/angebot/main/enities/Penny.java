@@ -19,7 +19,10 @@ public class Penny {
     private Long id;
 
     private String produktName;
+    private String produktMaker;
     private String produktPrise;
-    private LocalDate localDate;
+    private String imageLink;
+    private LocalDate vonDate;
+    private LocalDate bisDate;
 
 }
