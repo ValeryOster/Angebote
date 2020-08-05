@@ -1,6 +1,5 @@
 package de.angebot.main.controller;
 
-import de.angebot.main.enities.Penny;
 import de.angebot.main.gathering.penny.PennyOffer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
