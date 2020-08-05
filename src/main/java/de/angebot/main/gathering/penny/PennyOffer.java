@@ -59,8 +59,8 @@ public class PennyOffer implements Gathering {
         angebotLinks.forEach(angebot -> {
             Penny penny = new Penny();
             penny.setVonDate(startDate);
-            penny.setBisDate(LocalDate.now()
-                    .with(TemporalAdjusters.next(DayOfWeek.SATURDAY)));
+            LocalDate endDate = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
+            penny.setBisDate(endDate);
 
             Document offer = getDocument(mainUrl + angebot);
             String price = offer.select("div.bubble__wrap-inner>span")
@@ -80,15 +80,16 @@ public class PennyOffer implements Gathering {
                 imagLink = select
                         .attr("src");
             }
-            penny.setImageLink(Utils.downloadImage(imagLink));
+            penny.setImageLink(Utils.downloadImage(imagLink,"penny", endDate));
             penny.setProduktMaker(strings.get(0));
             penny.setProduktName(strings.get(1));
             penny.setProduktPrise(price);
-            System.out.println("Hersteller: " + penny.getProduktMaker() + ", Name:" + penny.getProduktName() + " - "
-                    + penny.getProduktPrise() + " /nBild: " + penny.getImageLink());
+//            System.out.println("Hersteller: " + penny.getProduktMaker() + ", Name:" + penny.getProduktName() + " - "
+//                    + penny.getProduktPrise() + " /nBild: " + penny.getImageLink());
             
             
             pennyRepo.save(penny);
+            System.out.println("Gespeichert: " + penny.getProduktName());
         });
     }
 

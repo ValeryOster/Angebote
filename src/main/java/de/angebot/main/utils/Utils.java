@@ -6,6 +6,9 @@ import org.jsoup.nodes.Document;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -27,7 +30,7 @@ public class Utils {
     }
 
     public static List<String> splittToNameOrMaker(String mixed) {
-        String name="";
+        String name = "";
         StringBuilder maker = new StringBuilder();
         String[] myAr = mixed.split(" ");
 
@@ -36,17 +39,17 @@ public class Utils {
                 maker.append(" " + myAr[i]);
             } else {
                 name = mixed.substring(maker.length());
-               break;
+                break;
             }
         }
-        return Arrays.asList(maker.toString().trim(), name.trim());
+        return Arrays.asList(maker.toString()
+                .trim(), name.trim());
     }
 
-    public static String downloadImage(String strImageURL){
+    public static String downloadImage(String strImageURL, String storageName, LocalDate endDate) {
 
         //get file name from image path
-        String strImageName = strImageURL.substring( strImageURL.lastIndexOf("/") + 1 );
-        System.out.println("Saving: " + strImageName + ", from: " + strImageURL);
+        String strImageName = strImageURL.substring(strImageURL.lastIndexOf("/") + 1);
 
         try {
             //open the stream from URL
@@ -56,11 +59,13 @@ public class Utils {
             byte[] buffer = new byte[4096];
             int n = -1;
 
-            String path = IMAGE_DESTINATION_FOLDER + "/" + strImageName;
-            OutputStream os = new FileOutputStream(path);
+            String path = IMAGE_DESTINATION_FOLDER + "/" + storageName + "/" + endDate;
+            //Create Directory if not exists
+            String bild = Files.createDirectories(Paths.get(path)).toString() + "/" + strImageName;
+            OutputStream os = new FileOutputStream(bild);
 
             //write bytes to the output stream
-            while ( (n = in.read(buffer)) != -1 ){
+            while ((n = in.read(buffer)) != -1) {
                 os.write(buffer, 0, n);
             }
             os.close();
@@ -72,8 +77,10 @@ public class Utils {
     }
 
     public static LocalDate getDate(int var) {
-        int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        int today = Calendar.getInstance()
+                .get(Calendar.DAY_OF_WEEK);
         return LocalDate.now(ZoneId.of("Europe/Paris"))
                 .minusDays(today - var);
     }
+
 }

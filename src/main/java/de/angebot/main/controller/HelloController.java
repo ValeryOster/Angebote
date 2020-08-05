@@ -14,7 +14,7 @@ public class HelloController {
 	@RequestMapping("/")
 	public String index() {
 		pennyOffer.startGathering();
-		return "Greetings from Spring Boot!";
+		return "Gesammelt";
 	}
 
 }
