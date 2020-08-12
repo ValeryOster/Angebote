@@ -63,15 +63,21 @@ public class PennyOffer implements Gathering {
             penny.setBisDate(endDate);
 
             Document offer = getDocument(mainUrl + angebot);
-            String price = offer.select("div.bubble__wrap-inner>span")
-                    .text();
+            String price = offer.select("div.bubble__wrap-inner>span").text();
+//            String origPrice = offer.select("div.bubble__small-value>span").text();
+            String origPrice = offer.select("div.bubble.bubble__price--yellow.detail-block__price-bubble > div > div > div > div > span")
+                    .text()
+                    .replaceAll("[a-zA-Z]", "").trim();
+//            If star, facke offer, go to next
             if (price.isEmpty() || price.contains("*")) {
                 return;
             }
+
             String offerName = offer.select("h1.detail-block__hdln")
                     .first()
                     .html()
                     .replace("*", "");
+            System.out.println(offerName + ", "+ price+" , orig = " +(origPrice.isEmpty() ? "0":origPrice));
             List<String> strings = Utils.splittToNameOrMaker(offerName);
             String imagLink = offer.select("div.detail-block__carousel-slide>img")
                     .attr("src");
@@ -84,6 +90,7 @@ public class PennyOffer implements Gathering {
             penny.setProduktMaker(strings.get(0));
             penny.setProduktName(strings.get(1));
             penny.setProduktPrise(price);
+            penny.setProduktRegularPrise(origPrice);
 //            System.out.println("Hersteller: " + penny.getProduktMaker() + ", Name:" + penny.getProduktName() + " - "
 //                    + penny.getProduktPrise() + " /nBild: " + penny.getImageLink());
             

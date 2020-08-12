@@ -21,6 +21,7 @@ public class Penny {
     private String produktName;
     private String produktMaker;
     private String produktPrise;
+    private String produktRegularPrise;
     private String imageLink;
     private LocalDate vonDate;
     private LocalDate bisDate;
